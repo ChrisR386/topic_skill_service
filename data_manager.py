@@ -1,28 +1,18 @@
 import json
 import os
 
-
 class JsonDataManager:
+    def __init__(self, filename):
+        self.filename = filename
+        # Stelle sicher, dass die Datei existiert
+        if not os.path.exists(self.filename):
+            with open(self.filename, 'w', encoding='utf-8') as f:
+                json.dump([], f)  # Leere Liste als Anfang
 
+    def load_data(self):
+        with open(self.filename, 'r', encoding='utf-8') as f:
+            return json.load(f)
 
-    def __init__(self):
-        pass
-
-
-    def read_data(self, filepath):
-        if not os.path.exists(filepath):
-            return []
-    
-        try:
-            with open(filepath, 'r', encoding='utf-8') as file:
-                return json.load(file)
-        except json.JSONDecodeError:
-            print(f"Fehler beim Dekodieren der JSON-Datei: {filepath}. Bitte JSON-Syntax überprüfen!")
-            return []
-        except Exception as e:
-            print(f"Ein unerwarteter Fehler ist aufgetreten beim Lesen von {filepath}: {e}")
-            return []
-
-
-    def write_data(self, filepath):
-        pass
+    def write_data(self, data):
+        with open(self.filename, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)

@@ -1,24 +1,31 @@
-import os
-from flask import Flask, jsonify
-from data_manager import JsonDataManager 
+from flask import Flask, jsonify, request
+from data_manager import JsonDataManager
 
 app = Flask(__name__)
-data_manager = JsonDataManager()
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-TOPICS_FILE = os.path.join(DATA_DIR, 'topics.json')
+# Data Manager für skills.json
+skill_data_manager = JsonDataManager('data/skills.json')
 
+@app.route('/skills', methods=['GET'])
+def get_skills():
+    skills = skill_data_manager.load_data()
+    return jsonify(skills)
 
-@app.route('/')
-def hello_world():
-    return "Hello from Topic and Skill Service!"
+@app.route('/skills', methods=['POST'])
+def create_skill():
+    data = request.get_json()
+    new_skill = {
+        'name': data['name'],
+        'topicId': data['topicId'],
+        'difficulty': data.get('difficulty', 'beginner')
+    }
 
+    # Daten laden, neuen Skill hinzufügen, speichern
+    skills = skill_data_manager.load_data()
+    skills.append(new_skill)
+    skill_data_manager.write_data(skills)
 
-@app.route('/topics', methods=['GET'])
-def get_topics():
-    topics = data_manager.read_data(TOPICS_FILE)
-    return jsonify(topics)
-
+    return jsonify(new_skill), 201
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
