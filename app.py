@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request
 from data_manager import JsonDataManager
+from routes.topics import topics_bp  # Importiere Blueprint
 
 app = Flask(__name__)
 
-# Data Manager für skills.json
 skill_data_manager = JsonDataManager('data/skills.json')
 
 @app.route('/skills', methods=['GET'])
@@ -19,13 +19,13 @@ def create_skill():
         'topicId': data['topicId'],
         'difficulty': data.get('difficulty', 'beginner')
     }
-
-    # Daten laden, neuen Skill hinzufügen, speichern
     skills = skill_data_manager.load_data()
     skills.append(new_skill)
     skill_data_manager.write_data(skills)
-
     return jsonify(new_skill), 201
+
+# Blueprint registrieren
+app.register_blueprint(topics_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)

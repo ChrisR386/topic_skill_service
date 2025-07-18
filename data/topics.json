@@ -1,12 +1,17 @@
 [
-  {
-    "id": 1,
-    "title": "Python Basics",
-    "description": "Introduction to Python programming language."
-  },
-  {
-    "id": 2,
-    "title": "Flask Web Development",
-    "description": "Building web apps with Flask framework."
-  }
+    {
+        "id": 1,
+        "title": "Python Basics",
+        "description": "Introduction to Python programming language."
+    },
+    {
+        "id": 2,
+        "title": "Flask Web Development",
+        "description": "Building web apps with Flask framework."
+    },
+    {
+        "id": "t3",
+        "name": "Django",
+        "description": "Building web apps with Django."
+    }
 ]
